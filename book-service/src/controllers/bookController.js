@@ -1,4 +1,5 @@
 const bookModel = require('../models/bookModel');
+const Joi = require('joi');
 
 exports.getAllBooks = async (req, res) => {
     try {
@@ -19,6 +20,21 @@ exports.getBookById = async (req, res) => {
 };
 
 exports.createBook = async (req, res) => {
+    const schema = Joi.object({
+        title: Joi.string().max(100).required(),
+        author: Joi.string().max(100).required(),
+        publishedDate: Joi.date().required(),
+        summary: Joi.string().required(),
+        price: Joi.number().precision(2).required(),
+        quantity: Joi.number().integer().required(),
+    });
+
+    const { error } = schema.validate(req.body);
+
+    if (error) {
+        return res.status(400).json({ error: error.details[0].message });
+    }
+
     try {
         const newBook = await bookModel.create(req.body);
         res.status(201).json(newBook);
