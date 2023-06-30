@@ -23,9 +23,10 @@ exports.update = async (id, bookData) => {
         'UPDATE Book SET title = $1, author = $2, publishedDate = $3, summary = $4, price = $5, quantity = $6 WHERE id = $7 RETURNING *',
         [bookData.title, bookData.author, bookData.publishedDate, bookData.summary, bookData.price, bookData.quantity, id]
     );
-    return result.rows[0];
+    return result.rowCount ? result.rows[0] : null;
 };
 
 exports.remove = async (id) => {
-    await db.query('DELETE FROM Book WHERE id = $1', [id]);
+    const result = await db.query('DELETE FROM Book WHERE id = $1 RETURNING *', [id]);
+    return result.rowCount;
 };
