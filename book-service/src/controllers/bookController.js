@@ -13,6 +13,9 @@ exports.getAllBooks = async (req, res) => {
 exports.getBookById = async (req, res) => {
     try {
         const book = await bookModel.findById(req.params.id);
+        if (!book) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
         res.status(200).json(book);
     } catch (error) {
         res.status(500).json({ error: error.toString() });
@@ -46,6 +49,9 @@ exports.createBook = async (req, res) => {
 exports.updateBook = async (req, res) => {
     try {
         const updatedBook = await bookModel.update(req.params.id, req.body);
+        if (!updatedBook) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
         res.status(200).json(updatedBook);
     } catch (error) {
         res.status(500).json({ error: error.toString() });
@@ -54,7 +60,10 @@ exports.updateBook = async (req, res) => {
 
 exports.deleteBook = async (req, res) => {
     try {
-        await bookModel.remove(req.params.id);
+        const deletedBook = await bookModel.remove(req.params.id);
+        if (!deletedBook) {
+            return res.status(404).json({ error: 'Book not found' });
+        }
         res.status(200).json({ message: 'Book deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.toString() });
