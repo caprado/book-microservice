@@ -1,0 +1,8 @@
+UserSchema: {
+    _id: ObjectId,
+    firstName: String,
+    lastName: String,
+    email: String,
+    password: String, // store hashed password
+    createdDate: Date,
+}

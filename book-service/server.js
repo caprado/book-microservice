@@ -2,7 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const port = process.env.PORT;
-const bookRoutes = require('./src/routes/bookRoutes');
+const bookRoutes = require('./routes/bookRoutes');
 
 // Body parser middleware
 app.use(express.json());
