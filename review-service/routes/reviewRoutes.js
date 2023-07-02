@@ -13,8 +13,10 @@ router.post(
   ],
   reviewController.createReview
 );
+
 router.get('/review/:id', authorize, reviewController.getReview);
 router.get('/reviews', authorize, reviewController.getAllReviews);
+
 router.put(
   '/review/:id',
   authorize,
@@ -24,4 +26,7 @@ router.put(
   ],
   reviewController.updateReview
 );
+
 router.delete('/review/:id', authorize, reviewController.deleteReview);
+
+module.exports = router;

@@ -1,12 +1,10 @@
-const express = require('express');
+const grpc = require('@grpc/grpc-js');
+const protoLoader = require('@grpc/proto-loader');
 const mongoose = require('mongoose');
-const cors = require('cors');
-const userRoutes = require('./routes/userRoutes');
 require('dotenv').config();
+const userService = require('./server/userService');
+const path = require('path');
 
-const app = express();
-
-// Connect to MongoDB
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGODB_URI, {
@@ -21,14 +19,18 @@ const connectDB = async () => {
   }
 };
 
-// Call the connectDB function to connect to MongoDB
 connectDB();
 
-app.use(cors());
-app.use(express.json());
+const PROTO_PATH = path.resolve(__dirname, './proto/user.proto');
 
-// Routes
-app.use('/user', userRoutes);
+const packageDefinition = protoLoader.loadSync(PROTO_PATH);
+const userProto = grpc.loadPackageDefinition(packageDefinition);
 
-const port = process.env.PORT || 3000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+const server = new grpc.Server();
+
+server.addService(userProto.UserService.service, userService);
+
+server.bindAsync('localhost:' + process.env.PORT, grpc.ServerCredentials.createInsecure(), () => {
+  console.log('Server running at http://localhost:' + process.env.PORT);
+  server.start();
+});
