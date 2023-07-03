@@ -1,12 +1,12 @@
-const bookModel = require('../models/bookModel');
 const Joi = require('joi');
-const { Status } = require('grpc');
+const { status } = require('@grpc/grpc-js');
 const jwt = require('jsonwebtoken');
+const { Book } = require('../models/bookModel');
 
 const validateToken = (call) => {
   const metadata = call.metadata.getMap();
   
-  const {authorization} = metadata;
+  const { authorization } = metadata;
   if (!authorization) {
     throw new Error('No Authorization token provided');
   }
@@ -18,12 +18,12 @@ const validateToken = (call) => {
 exports.getAllBooks = async (call, callback) => {
     try {
         validateToken(call);
-        
-        const books = await bookModel.findAll();
+
+        const books = await Book.findAll();
         callback(null, { books });
     } catch (error) {
         callback({
-            code: Status.INTERNAL,
+            code: status.INTERNAL,
             message: error.toString(),
         });
     }
@@ -33,17 +33,17 @@ exports.getBookById = async (call, callback) => {
     try {
         validateToken(call);
 
-        const book = await bookModel.findById(call.request.id);
+        const book = await Book.findById(call.request.id);
         if (!book) {
             return callback({
-                code: Status.NOT_FOUND,
+                code: status.NOT_FOUND,
                 message: 'Book not found',
             });
         }
         callback(null, book);
     } catch (error) {
         callback({
-            code: Status.INTERNAL,
+            code: status.INTERNAL,
             message: error.toString(),
         });
     }
@@ -62,18 +62,18 @@ exports.createBook = async (call, callback) => {
     const { error } = schema.validate(call.request);
     if (error) {
         return callback({
-            code: Status.INVALID_ARGUMENT,
+            code: status.INVALID_ARGUMENT,
             message: error.details[0].message,
         });
     }
 
     try {
         validateToken(call);
-        const newBook = await bookModel.create(call.request);
+        const newBook = await Book.create(call.request);
         callback(null, newBook);
     } catch (error) {
         callback({
-            code: Status.INTERNAL,
+            code: status.INTERNAL,
             message: error.toString(),
         });
     }
@@ -83,17 +83,17 @@ exports.updateBook = async (call, callback) => {
     try {
         validateToken(call);
 
-        const updatedBook = await bookModel.update(call.request.id, call.request);
+        const updatedBook = await Book.update(call.request.id, call.request);
         if (!updatedBook) {
             return callback({
-                code: Status.NOT_FOUND,
+                code: status.NOT_FOUND,
                 message: 'Book not found',
             });
         }
         callback(null, updatedBook);
     } catch (error) {
         callback({
-            code: Status.INTERNAL,
+            code: status.INTERNAL,
             message: error.toString(),
         });
     }
@@ -103,17 +103,17 @@ exports.deleteBook = async (call, callback) => {
     try {
         validateToken(call);
 
-        const deletedBook = await bookModel.remove(call.request.id);
+        const deletedBook = await Book.remove(call.request.id);
         if (!deletedBook) {
             return callback({
-                code: Status.NOT_FOUND,
+                code: status.NOT_FOUND,
                 message: 'Book not found',
             });
         }
         callback(null, { message: 'Book deleted successfully' });
     } catch (error) {
         callback({
-            code: Status.INTERNAL,
+            code: status.INTERNAL,
             message: error.toString(),
         });
     }
