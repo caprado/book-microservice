@@ -1,6 +1,5 @@
 const jwt = require('jsonwebtoken');
 const { Order, OrderItem } = require('../models/orderModel');
-const { sequelize } = require('../models');
 
 const validateToken = (call) => {
   const metadata = call.metadata.getMap();

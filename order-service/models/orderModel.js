@@ -1,5 +1,5 @@
 const { Sequelize, DataTypes } = require('sequelize');
-const sequelize = require('../server');
+const sequelize = require('../db');
 
 const Order = sequelize.define('Order', {
   id: {
@@ -8,7 +8,7 @@ const Order = sequelize.define('Order', {
     primaryKey: true
   },
   userId: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.STRING,
     allowNull: false
   },
   orderDate: {

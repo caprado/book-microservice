@@ -12,7 +12,7 @@ const orderProto = grpc.loadPackageDefinition(packageDefinition);
 
 const server = new grpc.Server();
 
-server.addService(orderProto.OrderService.service, orderService);
+server.addService(orderProto.order.OrderService.service, orderService);
 
 server.bindAsync(`0.0.0.0:${process.env.PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
   console.log(`Listening on port ${process.env.PORT || 4000}...`);
