@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package review;
+
+// The review service definition
+service ReviewService {
+  rpc CreateReview (ReviewRequest) returns (ReviewResponse) {}
+  rpc GetReview (ReviewIdRequest) returns (ReviewResponse) {};
+  rpc UpdateReview (UpdateReviewRequest) returns (ReviewResponse) {};
+  rpc DeleteReview (ReviewIdRequest) returns (DeleteReviewResponse) {};
+  rpc GetAllReviews (GetAllReviewsRequest) returns (ReviewListResponse) {};
+}
+
+// The request message containing the user's name
+message ReviewRequest {
+  string userId = 1;
+  string bookId = 2;
+  int32 rating = 3;
+  string review = 4;
+}
+
+message UpdateReviewRequest {
+  string id = 1;
+  string userId = 2;
+  string bookId = 3;
+  int32 rating = 4;
+  string review = 5;
+}
+
+message ReviewIdRequest {
+  string id = 1;
+}
+
+message GetAllReviewsRequest {}
+
+// The response message containing the review details
+message ReviewResponse {
+  string id = 1;
+  string userId = 2;
+  string bookId = 3;
+  int32 rating = 4;
+  string review = 5;
+}
+
+message DeleteReviewResponse {
+  string message = 1;
+}
+
+message ReviewListResponse {
+  repeated ReviewResponse reviews = 1;
+}

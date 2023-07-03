@@ -74,7 +74,7 @@ exports.GetUser = async (call, callback) => {
 exports.UpdateUser = async (call, callback) => {
   try {
     const { id, ...updateData } = call.request;
-
+    
     const user = await User.findByIdAndUpdate(id, updateData, { new: true });
     if (!user) {
       return callback({ code: grpc.status.NOT_FOUND, message: 'User not found' });
