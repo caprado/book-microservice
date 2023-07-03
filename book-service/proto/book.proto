@@ -1,0 +1,76 @@
+syntax = "proto3";
+
+package book;
+
+// The book service definition.
+service BookService {
+  // Gets all books
+  rpc GetAllBooks(GetAllBooksRequest) returns (GetAllBooksResponse) {}
+
+  // Gets a book by id
+  rpc GetBookById(GetBookByIdRequest) returns (Book) {}
+
+  // Creates a new book
+  rpc CreateBook(CreateBookRequest) returns (Book) {}
+
+  // Updates a book
+  rpc UpdateBook(UpdateBookRequest) returns (Book) {}
+
+  // Deletes a book
+  rpc DeleteBook(DeleteBookRequest) returns (DeleteBookResponse) {}
+}
+
+// Request message for GetAllBooks
+message GetAllBooksRequest {}
+
+// Response message for GetAllBooks
+message GetAllBooksResponse {
+  repeated Book books = 1;
+}
+
+// Request message for GetBookById
+message GetBookByIdRequest {
+  string id = 1;
+}
+
+// Request message for CreateBook
+message CreateBookRequest {
+  string title = 1;
+  string author = 2;
+  string publishedDate = 3;
+  string summary = 4;
+  double price = 5;
+  int32 quantity = 6;
+}
+
+// Request message for UpdateBook
+message UpdateBookRequest {
+  string id = 1;
+  string title = 2;
+  string author = 3;
+  string publishedDate = 4;
+  string summary = 5;
+  double price = 6;
+  int32 quantity = 7;
+}
+
+// Request message for DeleteBook
+message DeleteBookRequest {
+  string id = 1;
+}
+
+// Response message for DeleteBook
+message DeleteBookResponse {
+  string message = 1;
+}
+
+// The Book message represents a book with various attributes.
+message Book {
+  string id = 1;
+  string title = 2;
+  string author = 3;
+  string publishedDate = 4;
+  string summary = 5;
+  double price = 6;
+  int32 quantity = 7;
+}

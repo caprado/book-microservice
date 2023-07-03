@@ -1,12 +1,10 @@
-const express = require('express');
-const cors = require('cors');
-const orderRoutes = require('./routes/orderRoutes');
+const grpc = require('@grpc/grpc-js');
+const protoLoader = require('@grpc/proto-loader');
 const { Sequelize } = require('sequelize');
 require('dotenv').config();
+const orderService = require('./server/orderService');
+const path = require('path');
 
-const app = express();
-
-// Database connection
 const sequelize = new Sequelize(
   process.env.PG_DB,
   process.env.PG_USER,
@@ -28,14 +26,18 @@ sequelize
   })
   .catch(err => console.error('Unable to connect to the database:', err));
 
-// Middlewares
-app.use(cors());
-app.use(express.json());
+const PROTO_PATH = path.resolve(__dirname, './proto/order.proto');
 
-// Routes
-app.use('/', orderRoutes);
+const packageDefinition = protoLoader.loadSync(PROTO_PATH);
+const orderProto = grpc.loadPackageDefinition(packageDefinition);
 
-const port = process.env.PORT || 4000;
-app.listen(port, () => console.log(`Listening on port ${port}...`));
+const server = new grpc.Server();
+
+server.addService(orderProto.OrderService.service, orderService);
+
+server.bindAsync(`0.0.0.0:${process.env.PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
+  console.log(`Listening on port ${process.env.PORT || 4000}...`);
+  server.start();
+});
 
 module.exports = sequelize;

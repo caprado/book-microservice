@@ -29,7 +29,7 @@ const server = new grpc.Server();
 
 server.addService(userProto.UserService.service, userService);
 
-server.bindAsync('localhost:' + process.env.PORT, grpc.ServerCredentials.createInsecure(), () => {
-  console.log('Server running at http://localhost:' + process.env.PORT);
+server.bindAsync(`0.0.0.0:${process.env.PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
+  console.log(`Listening on port ${process.env.PORT || 4000}...`);
   server.start();
 });

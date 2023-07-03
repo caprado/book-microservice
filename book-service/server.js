@@ -1,21 +1,44 @@
+const grpc = require('@grpc/grpc-js');
+const protoLoader = require('@grpc/proto-loader');
+const { Sequelize } = require('sequelize');
 require('dotenv').config();
-const express = require('express');
-const app = express();
-const port = process.env.PORT;
-const bookRoutes = require('./routes/bookRoutes');
+const bookService = require('./server/bookService');
+const path = require('path');
 
-// Body parser middleware
-app.use(express.json());
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASS,
+  {
+    host: process.env.DB_HOST,
+    port: process.env.DB_PORT,
+    dialect: 'postgres'
+  }
+);
 
-app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).send('Something broke!');
+sequelize
+  .authenticate()
+  .then(() => {
+    console.log('Database connected...');
+    
+    sequelize.sync()
+      .then(() => console.log('Tables created...'))
+      .catch(err => console.error('Unable to create tables:', err));
+  })
+  .catch(err => console.error('Unable to connect to the database:', err));
+
+const PROTO_PATH = path.resolve(__dirname, './proto/book.proto');
+
+const packageDefinition = protoLoader.loadSync(PROTO_PATH);
+const bookProto = grpc.loadPackageDefinition(packageDefinition);
+
+const server = new grpc.Server();
+
+server.addService(bookProto.book.BookService.service, bookService);
+
+server.bindAsync(`0.0.0.0:${process.env.PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
+  console.log(`Listening on port ${process.env.PORT || 4000}...`);
+  server.start();
 });
 
-// Mount router
-app.use('/book', bookRoutes);
-
-// Start listening for connections
-app.listen(port, () => {
-    console.log(`Book service listening at http://localhost:${port}`);
-});
+module.exports = sequelize;
