@@ -32,7 +32,7 @@ message Order {
   repeated OrderItem orderItems = 5;
 }
 
-message GetAllOrdersRequest {} // Empty message as we don't need any input for this operation
+message GetAllOrdersRequest {}
 
 message GetAllOrdersResponse {
   repeated Order orders = 1;
