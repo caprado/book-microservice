@@ -62,22 +62,22 @@ For the frontend, we create a nice interface using React.js. It will communicate
 ### **Containerization and Orchestration:**
 
 - **Docker:**
-    - Create a Dockerfile for each microservice
-    - Build and run the containers
+    - Dockerfiles for each microservice
+    - Build and runs the containers
 - **Kubernetes:**
-    - Create YAML configuration files for each service
-    - Set up the deployment and services
+    - YAML configuration files for each service
+    - Set up for deployment and services
 
 ### **Authentication:**
 
 - **JWT:**
-    - Generate and verify JWT tokens in User service
-    - Protect routes in Book, Order, and Review service by verifying the JWT token
+    - Generates and verifies JWT tokens with our User service
+    - Protect routes in Book, Order, and Review service by verifying the JWT token with each request
 
 ### **CI/CD:**
 
 - **Jenkins:**
-    - Set up Jenkins pipeline for CI/CD
-    - Perform testing and build Docker images
-    - Push Docker images to DockerHub or any other Docker Registry
-    - Deploy the app to Kubernetes
+    - Jenkins pipeline for CI/CD
+    - Performs testing and building Docker images
+    - Pushes Docker images to DockerHub or any other Docker Registry we have
+    - Deploy's the app to Kubernetes
