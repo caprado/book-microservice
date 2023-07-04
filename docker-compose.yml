@@ -1,0 +1,18 @@
+version: '3'
+services:
+  user-service:
+    build: ./user-service
+    ports:
+      - '3001:3001'
+  book-service:
+    build: ./book-service
+    ports:
+      - '3002:3002'
+  order-service:
+    build: ./order-service
+    ports:
+      - '3003:3003'
+  review-service:
+    build: ./review-service
+    ports:
+      - '3004:3004'
