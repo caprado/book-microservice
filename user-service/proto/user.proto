@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package user;
+
 service UserService {
   rpc RegisterUser (RegisterUserRequest) returns (UserResponse);
   rpc LoginUser (LoginUserRequest) returns (TokenResponse);

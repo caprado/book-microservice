@@ -1,5 +1,5 @@
-const jwt = require('jsonwebtoken');
 const Review = require('../models/reviewModel');
+const jwt = require('jsonwebtoken');
 
 const validateToken = (call) => {
   const metadata = call.metadata.getMap();

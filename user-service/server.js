@@ -27,7 +27,7 @@ const userProto = grpc.loadPackageDefinition(packageDefinition);
 
 const server = new grpc.Server();
 
-server.addService(userProto.UserService.service, userService);
+server.addService(userProto.user.UserService.service, userService);
 
 server.bindAsync(`0.0.0.0:${process.env.PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
   console.log(`Listening on port ${process.env.PORT || 4000}...`);
