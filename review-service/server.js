@@ -1,13 +1,13 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const mongoose = require('mongoose');
-require('dotenv').config();
 const reviewService = require('./server/reviewService');
 const path = require('path');
+require('dotenv').config({ path: __dirname + '/../../.env' });
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(process.env.MONGODB_URI, {
+    await mongoose.connect(process.env.REVIEW_MONGODB_URI, {
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
@@ -29,7 +29,7 @@ const server = new grpc.Server();
 
 server.addService(reviewProto.review.ReviewService.service, reviewService);
 
-server.bindAsync(`0.0.0.0:${process.env.PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
-  console.log(`Listening on port ${process.env.PORT || 4000}...`);
+server.bindAsync(`0.0.0.0:${process.env.REVIEW_PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
+  console.log(`Listening on port ${process.env.REVIEW_PORT || 4000}...`);
   server.start();
 });

@@ -1,7 +1,7 @@
 const grpc = require('@grpc/grpc-js');
 const protoLoader = require('@grpc/proto-loader');
 const path = require('path');
-require('dotenv').config();
+require('dotenv').config({ path: __dirname + '/../../.env' });
 
 const orderService = require('./server/orderService');
 
@@ -14,7 +14,7 @@ const server = new grpc.Server();
 
 server.addService(orderProto.order.OrderService.service, orderService);
 
-server.bindAsync(`0.0.0.0:${process.env.PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
-  console.log(`Listening on port ${process.env.PORT || 4000}...`);
+server.bindAsync(`0.0.0.0:${process.env.ORDER_PORT || 4000}`, grpc.ServerCredentials.createInsecure(), () => {
+  console.log(`Listening on port ${process.env.ORDER_PORT || 4000}...`);
   server.start();
 });

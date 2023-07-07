@@ -5,7 +5,7 @@ const { Book } = require('../models/bookModel');
 
 const validateToken = (call) => {
   const metadata = call.metadata.getMap();
-  
+
   const { authorization } = metadata;
   if (!authorization) {
     throw new Error('No Authorization token provided');
